@@ -109,6 +109,36 @@ export type Database = {
           },
         ]
       }
+      ngo_profiles: {
+        Row: {
+          address: string | null
+          emails: string | null
+          krs: string | null
+          name: string | null
+          phone: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          address?: string | null
+          emails?: string | null
+          krs?: string | null
+          name?: string | null
+          phone?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          address?: string | null
+          emails?: string | null
+          krs?: string | null
+          name?: string | null
+          phone?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           id: string

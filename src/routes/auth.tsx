@@ -1,3 +1,4 @@
+import { normalizeKrs } from "@/lib/ngo";
 import { createFileRoute, redirect as redirectTo, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -42,6 +43,8 @@ function AuthPage() {
   const [mode, setMode] = useState<"in" | "up">("in");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [organization, setOrganization] = useState("");
+  const [krs, setKrs] = useState("");
   const [busy, setBusy] = useState(false);
 
   async function submit(e: React.FormEvent) {
@@ -53,10 +56,14 @@ function AuthPage() {
         if (error) throw error;
         navigate({ to: redirect as "/" });
       } else {
+        if (krs.trim() && !normalizeKrs(krs)) throw new Error("Numer KRS musi mieć 10 cyfr.");
         const { data, error } = await supabase.auth.signUp({
           email,
           password,
-          options: { emailRedirectTo: window.location.origin + redirect },
+          options: {
+            emailRedirectTo: window.location.origin + redirect,
+            data: { organization: organization.trim(), krs: normalizeKrs(krs) ?? "" },
+          },
         });
         if (error) throw error;
         if (data.session) navigate({ to: redirect as "/" });
@@ -86,6 +93,18 @@ function AuthPage() {
           <Label htmlFor="pw">Hasło</Label>
           <Input id="pw" type="password" required minLength={6} value={password} onChange={(e) => setPassword(e.target.value)} />
         </div>
+        {mode === "up" && (
+          <>
+            <div className="grid gap-2">
+              <Label htmlFor="org">Nazwa organizacji (opcjonalnie)</Label>
+              <Input id="org" value={organization} onChange={(e) => setOrganization(e.target.value)} />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="krs">Numer KRS (opcjonalnie)</Label>
+              <Input id="krs" inputMode="numeric" placeholder="0000123456" value={krs} onChange={(e) => setKrs(e.target.value)} />
+            </div>
+          </>
+        )}
         <Button type="submit" disabled={busy}>
           {mode === "in" ? "Zaloguj" : "Zarejestruj"}
         </Button>

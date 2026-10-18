@@ -31,3 +31,10 @@ describe("NGO access", () => {
     expect(mocks.from).not.toHaveBeenCalled();
   });
 });
+import { normalizeKrs, ngoPlUrl } from "@/lib/ngo";
+import { describe as d2, it as i2, expect as e2 } from "vitest";
+d2("KRS", () => {
+  i2("accepts 10 digits, ignoring spaces", () => e2(normalizeKrs("0000 123 456")).toBe("0000123456"));
+  i2("rejects wrong length", () => e2(normalizeKrs("12345")).toBeNull());
+  i2("no ngo.pl link without KRS", () => e2(ngoPlUrl(null)).toBeNull());
+});
