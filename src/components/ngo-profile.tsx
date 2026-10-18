@@ -50,14 +50,14 @@ export function NgoProfileView({ name, ownerId, canEdit }: Props) {
   async function save(e: React.FormEvent) {
     e.preventDefault();
     const krs = form.krs.trim() ? normalizeKrs(form.krs) : null;
-    if (form.krs.trim() && !krs) return toast.error("Numer KRS musi mieć 10 cyfr.");
+    if (form.krs.trim() && !krs) { toast.error("Numer KRS musi mieć 10 cyfr."); return; }
     const userId = profile.data?.user_id ?? ownerId;
-    if (!userId) return toast.error("Brak profilu do zapisania.");
+    if (!userId) { toast.error("Brak profilu do zapisania."); return; }
     const { error } = await supabase.from("ngo_profiles").upsert({
       user_id: userId, name: form.name.trim() || null, krs, emails: form.emails.trim() || null,
       phone: form.phone.trim() || null, address: form.address.trim() || null, updated_at: new Date().toISOString(),
     });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Zapisano profil.");
     setEditing(false);
     qc.invalidateQueries({ queryKey: ["ngo-profile"] });
