@@ -9,7 +9,13 @@ export async function loadNgoAccess(userId: string) {
   if (!isAdmin) query = query.eq("user_id", userId);
   const { data, error } = await query;
   if (error) throw error;
-  const names = [...new Set((data ?? []).map((row) => row.organization.trim()).filter(Boolean))];
+  let profileNames: string[] = [];
+  if (isAdmin) {
+    const profiles = await supabase.from("ngo_profiles").select("name").not("name", "is", null);
+    if (profiles.error) throw profiles.error;
+    profileNames = (profiles.data ?? []).map((row) => row.name ?? "");
+  }
+  const names = [...new Set([...(data ?? []).map((row) => row.organization), ...profileNames].map((n) => n.trim()).filter(Boolean))];
   return { isAdmin, names: isAdmin ? names.sort((a, b) => a.localeCompare(b, "pl")) : names.slice(0, 1) };
 }
 
