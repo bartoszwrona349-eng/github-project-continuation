@@ -17,3 +17,13 @@ export function filterNgoNames(names: string[], search: string) {
   const term = search.trim().toLocaleLowerCase("pl");
   return names.filter((name) => name.toLocaleLowerCase("pl").includes(term));
 }
+/** KRS is a unique 10-digit number per registered NGO; returns null when invalid. */
+export function normalizeKrs(input: string | null | undefined) {
+  const digits = (input ?? "").replace(/\D/g, "");
+  return digits.length === 10 ? digits : null;
+}
+
+export function ngoPlUrl(krs: string | null | undefined) {
+  const k = normalizeKrs(krs);
+  return k ? `https://spis.ngo.pl/szukaj?q=${k}` : null;
+}

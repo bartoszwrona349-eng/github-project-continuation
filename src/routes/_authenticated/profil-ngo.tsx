@@ -6,7 +6,7 @@ import { useSession } from "@/lib/session";
 import { filterNgoNames, loadNgoAccess } from "@/lib/ngo";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { EmptyNgoProfile } from "@/components/ngo-profile";
+import { NgoProfileView } from "@/components/ngo-profile";
 
 export const Route = createFileRoute("/_authenticated/profil-ngo")({
   head: () => ({ meta: [
@@ -53,7 +53,7 @@ function NgoPage() {
           </Link></li>)}
         </ul>
         {names.length === 0 && <p className="py-10 text-muted-foreground">{query.data.names.length ? "Brak organizacji pasujących do wyszukiwania." : "Brak organizacji NGO."}</p>}
-      </> : <EmptyNgoProfile name={query.data.names[0]} />)}
+      </> : <NgoProfileView ownerId={user?.id} name={query.data.names[0]} />)}
     </div>
   );
 }

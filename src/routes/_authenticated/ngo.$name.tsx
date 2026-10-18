@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
-import { EmptyNgoProfile } from "@/components/ngo-profile";
+import { NgoProfileView } from "@/components/ngo-profile";
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/_authenticated/ngo/$name")({
@@ -24,7 +24,7 @@ function NgoProfile() {
       <Button variant="ghost" onClick={() => router.history.back()}>← Wróć</Button>
       <p className="mt-4 text-sm uppercase tracking-widest text-accent">Profil organizacji</p>
       <h1 className="text-4xl font-semibold">{name}</h1>
-      <EmptyNgoProfile name={name} />
+      <NgoProfileView name={name} canEdit />
       <Link to="/" className="mt-6 inline-block text-sm hover:underline">Kalendarz</Link>
     </div>
   );
