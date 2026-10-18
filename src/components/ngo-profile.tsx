@@ -4,7 +4,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Building2, ChevronRight, ExternalLink, Mail, MapPin, Phone } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { ngoPlUrl, normalizeKrs } from "@/lib/ngo";
+import { ngoPlUrl, ngoRegistryUrl, normalizeKrs } from "@/lib/ngo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -66,6 +66,7 @@ export function NgoProfileView({ name, ownerId, canEdit }: Props) {
   if (profile.isPending) return <p className="mt-8 text-muted-foreground">Wczytywanie…</p>;
   const p = profile.data;
   const link = ngoPlUrl(p?.krs);
+  const registryLink = ngoRegistryUrl(p?.krs);
   const editable = canEdit || Boolean(ownerId);
 
   return (
@@ -99,8 +100,11 @@ export function NgoProfileView({ name, ownerId, canEdit }: Props) {
           </Row>
           <Row icon={<Phone className="size-4" />} label="Telefon">{p?.phone ? <a href={`tel:${p.phone}`} className="hover:underline">{p.phone}</a> : "—"}</Row>
           <Row icon={<MapPin className="size-4" />} label="Adres">{p?.address ?? "—"}</Row>
+          <Row icon={<ExternalLink className="size-4" />} label="Rejestr.io">
+            {registryLink ? <a href={registryLink} target="_blank" rel="noopener noreferrer" className="hover:underline">Dane organizacji w Rejestr.io</a> : "Podaj numer KRS, aby wyświetlić link"}
+          </Row>
           <Row icon={<ExternalLink className="size-4" />} label="ngo.pl">
-            {link ? <a href={link} target="_blank" rel="noreferrer" className="hover:underline">Zobacz profil w spisie ngo.pl</a> : "Podaj numer KRS, aby wyświetlić link"}
+            {link ? <a href={link} target="_blank" rel="noopener noreferrer" className="hover:underline">Wyszukaj organizację w ngo.pl</a> : "—"}
           </Row>
         </dl>
       )}

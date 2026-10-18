@@ -31,5 +31,11 @@ export function normalizeKrs(input: string | null | undefined) {
 
 export function ngoPlUrl(krs: string | null | undefined) {
   const k = normalizeKrs(krs);
-  return k ? `https://spis.ngo.pl/szukaj?q=${k}` : null;
+  return k ? `https://szukaj.ngo.pl/?search=${k}` : null;
+}
+
+/** Rejestr.io identifies organization pages with the numeric KRS, without leading zeros. */
+export function ngoRegistryUrl(krs: string | null | undefined) {
+  const k = normalizeKrs(krs);
+  return k && Number(k) > 0 ? `https://rejestr.io/krs/${Number(k)}` : null;
 }
