@@ -38,7 +38,6 @@ function NgoPage() {
       {query.isPending && <p className="mt-8 text-muted-foreground">Wczytywanie…</p>}
       {query.isError && <div className="mt-8"><p role="alert" className="text-destructive">Nie udało się wczytać organizacji.</p><Button variant="outline" className="mt-4" onClick={() => query.refetch()}>Spróbuj ponownie</Button></div>}
       {query.data && (query.data.isAdmin ? <>
-        <NgoProfileView ownerId={user?.id} />
         <div className="mt-8 flex flex-wrap items-center justify-between gap-4">
           <h2 className="text-xl font-semibold">Organizacje NGO <span className="text-muted-foreground">({query.data.names.length})</span></h2>
           <div className="relative w-full sm:w-80">
